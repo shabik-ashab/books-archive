@@ -1,24 +1,35 @@
 // onclick function for search button 
-const bookArchive = () => {
-    const books = document.getElementById('books-name').value;
-    const url = `https://openlibrary.org/search.json?q=${books}`;
-    // fetching url 
-    fetch(url)
-        .then(res => res.json())
-        .then(data => displayBooks(data));   
-}
-// function for using data and displaying it to ui 
-const displayBooks = books => {
+
+    const bookArchive = () => {
+        const books = document.getElementById('books-name');
+        const booksValue = books.value;
+        const url = `https://openlibrary.org/search.json?q=${booksValue}`;
+        // fetching url 
+        fetch(url)
+            .then(res => res.json())
+            .then(data => displayBooks(data));   
+    }
+    // function for using data and displaying it to ui 
+    const displayBooks = books => {
     const booklist = books.docs;
     // displaying search count 
     const countCont = document.getElementById('search-count');
     countCont.textContent = '';
+    if(books.numFound === 0){
+        countCont.innerHTML = `
+         <p class="text-danger fs-2">
+            No result found,Please try different keywords
+         </p>
+        `
+    }
+    else{
     countCont.innerHTML = `
-        <p>Search Found: ${books.numFound}</p>
+        <p class="fs-3 text-success">Search Result Found: ${books.numFound}</p>
     `
+    }
     // displayng books information 
     const booksCard = document.getElementById('books-card');
-    booksCard.textContent = '';
+    booksCard.textContent = ''; 
     booklist.length = 20;
     booklist.forEach(element => {
         const div = document.createElement('div');
@@ -34,7 +45,6 @@ const displayBooks = books => {
          </div>
         </div>
         `
-        booksCard.appendChild(div)
+        booksCard.appendChild(div);
     });  
 }
-
